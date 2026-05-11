@@ -1,0 +1,28 @@
+# Core scientific stack
+numpy>=1.26
+scipy>=1.11
+pandas>=2.1
+
+# Frontend
+streamlit>=1.30
+plotly>=5.18
+
+# Market data
+yfinance>=0.2.40
+
+# Persistence / ORM-lite
+SQLAlchemy>=2.0
+
+# Validation & config
+pydantic>=2.5
+python-dateutil>=2.9
+PyYAML>=6.0
+
+# Logging
+loguru>=0.7
+
+# Dev / test
+pytest>=8.0
+pytest-cov>=4.1
+ruff>=0.4
+mypy>=1.8
