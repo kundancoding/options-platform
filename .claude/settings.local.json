@@ -3,7 +3,9 @@
     "allow": [
       "Bash(python3 scripts/init_db.py --db /tmp/options_platform_smoke.db --seed)",
       "Bash(python3 -c ' *)",
-      "Bash(rm /tmp/options_platform_smoke.db)"
+      "Bash(rm /tmp/options_platform_smoke.db)",
+      "Bash(venv/bin/pytest tests/test_data/ -x --tb=short)",
+      "Bash(venv/bin/pytest --tb=short)"
     ]
   }
 }
