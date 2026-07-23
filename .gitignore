@@ -17,6 +17,8 @@ pip-wheel-metadata/
 venv/
 env/
 ENV/
+.deps/
+.claude/
 
 # Editors / IDEs
 .idea/

@@ -5,6 +5,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 
 from options_platform.pricing.base import OptionContract
+from options_platform.pricing.black_scholes import delta, gamma, rho, theta, vega
 
 
 @dataclass(frozen=True)
@@ -24,5 +25,10 @@ def compute_greeks(contract: OptionContract) -> Greeks:
     Vega is scaled per 1 vol point (i.e. dV/dsigma, not dV/d(sigma * 100)).
     Theta is per year; callers may convert to per-day in the UI.
     """
-    # TODO: implement using scipy.stats.norm; reuse d1/d2 helpers from black_scholes.
-    raise NotImplementedError
+    return Greeks(
+        delta=delta(contract),
+        gamma=gamma(contract),
+        vega=vega(contract),
+        theta=theta(contract),
+        rho=rho(contract),
+    )

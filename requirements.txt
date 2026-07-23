@@ -34,7 +34,6 @@ mypy==2.0.0
 mypy_extensions==1.1.0
 narwhals==2.21.0
 numpy==2.4.4
--e git+https://github.com/kundancoding/options-platform.git@b56578ff4de05fab00d9b210ed72b2bd9b018da1#egg=options_platform
 packaging==26.2
 pandas==3.0.2
 pathspec==1.1.1

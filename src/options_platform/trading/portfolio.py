@@ -16,15 +16,19 @@ class Portfolio:
 
     def get_or_create(self, symbol: str) -> Position:
         """Return the existing position or create an empty one."""
-        # TODO: dict.setdefault on self.positions.
-        raise NotImplementedError
+        return self.positions.setdefault(symbol, Position(symbol=symbol))
 
     def equity(self, marks: dict[str, float]) -> float:
         """Cash plus mark-to-market value of all positions."""
-        # TODO: sum cash + qty * mark across positions (handle option multiplier).
-        raise NotImplementedError
+        return self.cash + sum(position.quantity * float(marks.get(symbol, 0.0)) for symbol, position in self.positions.items())
 
     def aggregate_greeks(self, marks: dict[str, object]) -> dict[str, float]:
         """Return portfolio-level Greek aggregates (delta, gamma, vega, theta, rho)."""
-        # TODO: sum per-leg Greeks weighted by signed quantity.
-        raise NotImplementedError
+        totals = {name: 0.0 for name in ("delta", "gamma", "vega", "theta", "rho")}
+        for symbol, position in self.positions.items():
+            greek = marks.get(symbol)
+            if greek is None:
+                continue
+            for name in totals:
+                totals[name] += position.quantity * float(getattr(greek, name, 0.0))
+        return totals

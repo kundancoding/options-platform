@@ -18,8 +18,7 @@ class ScenarioGrid:
 
     def to_frame(self) -> pd.DataFrame:
         """Return the grid as a DataFrame indexed by vol, columns spot."""
-        # TODO: pd.DataFrame(self.pnl, index=self.vol_axis, columns=self.spot_axis).
-        raise NotImplementedError
+        return pd.DataFrame(self.pnl, index=self.vol_axis, columns=self.spot_axis).rename_axis("volatility", axis=0).rename_axis("spot", axis=1)
 
 
 def run_scenarios(
@@ -30,5 +29,10 @@ def run_scenarios(
     horizon_days: int = 0,
 ) -> ScenarioGrid:
     """Compute portfolio P&L on a (spot, vol) mesh ``horizon_days`` ahead."""
-    # TODO: build linspaces; reprice portfolio at each grid point.
-    raise NotImplementedError
+    spots = np.linspace(*spot_range)
+    vols = np.linspace(*vol_range)
+    if not hasattr(portfolio, "scenario_value"):
+        raise TypeError("portfolio must implement scenario_value(spot=, volatility=, horizon_days=)")
+    base = float(portfolio.scenario_value(spot=float(spots[len(spots)//2]), volatility=float(vols[len(vols)//2]), horizon_days=0))
+    pnl = np.array([[float(portfolio.scenario_value(spot=float(s), volatility=float(v), horizon_days=horizon_days)) - base for s in spots] for v in vols])
+    return ScenarioGrid(spots, vols, pnl)

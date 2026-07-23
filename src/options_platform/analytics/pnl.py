@@ -44,5 +44,14 @@ def attribute_pnl(
     delta_rate: float,
 ) -> PnLBreakdown:
     """Attribute (curr_mark - prev_mark) to the prior-period Greeks."""
-    # TODO: implement Taylor-expansion attribution; cross-gamma optional.
-    raise NotImplementedError
+    for field in ("delta", "gamma", "vega", "theta", "rho"):
+        if not hasattr(greeks_prev, field):
+            raise TypeError(f"greeks_prev must expose {field!r}")
+    delta_pnl = float(greeks_prev.delta) * delta_spot
+    gamma_pnl = 0.5 * float(greeks_prev.gamma) * delta_spot**2
+    vega_pnl = float(greeks_prev.vega) * delta_vol
+    # theta is calendar-time decay; delta_t is elapsed calendar time in years.
+    theta_pnl = float(greeks_prev.theta) * delta_t
+    rho_pnl = float(greeks_prev.rho) * delta_rate
+    residual = (curr_mark - prev_mark) - (delta_pnl + gamma_pnl + vega_pnl + theta_pnl + rho_pnl)
+    return PnLBreakdown(delta_pnl, gamma_pnl, vega_pnl, theta_pnl, rho_pnl, residual)
